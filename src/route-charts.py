@@ -22,9 +22,8 @@ Author:
 """
 
 import argparse
+import csv
 import os
-
-import pandas as pd
 
 import climbing_route_chart as crc
 
@@ -104,11 +103,14 @@ def validate_csv_file(file_path):
 
     # Check if the file contains the required columns
     try:
-        data = pd.read_csv(file_path)
-        if not required_columns.issubset(data.columns):
-            missing_columns = required_columns - set(data.columns)
-            print(f"Error: The input file is missing the following required columns: {missing_columns}")
-            return False
+        with open(file_path, mode="r", encoding="utf-8") as csvfile:
+            reader = csv.DictReader(csvfile)
+            columns = set(reader.fieldnames)
+
+            if not required_columns.issubset(columns):
+                missing_columns = required_columns - columns
+                print(f"Error: The input file is missing the following required columns: {missing_columns}")
+                return False
     except Exception as e:
         print(f"Error reading the CSV file: {e}")
         return False

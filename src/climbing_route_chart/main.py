@@ -33,10 +33,16 @@ def generate_climbing_route_charts(csv_string, params=None):
         climbing_data = process_csv(csv_string_io)
 
         # Group data by 'Relais'
-        grouped_data = climbing_data.groupby("Relais")
+        grouped_data = {}
+        for data in climbing_data:
+            relay = data["Relais"]
+            if relay not in grouped_data:
+                grouped_data[relay] = []
+            grouped_data[relay].append(data)
+            # TODO: exclude relais
 
         # Generate SVG for each 'Relais' group using the parameters
-        svg_list = [generate_svg_for_relay(relay, group, **params) for relay, group in grouped_data]
+        svg_list = [generate_svg_for_relay(relay, group, **params) for relay, group in grouped_data.items()]
 
         # Generate a multi-page PDF file with all the SVGs
         pdf_stream = generate_pdf_from_svgs(svg_list)

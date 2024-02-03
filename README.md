@@ -5,37 +5,61 @@ Climbing Route Chart Generator
 
 ## Overview
 
-__Climbing Route Chart Generator__ is a Python application designed for generating visual pie charts of indoor climbing routes. These charts are produced from CSV input, illustrating the distribution of route grades and the associated route setters. The tool is ideal for climbing gyms who wish to visualize route distributions in an easy-to-understand format.
+__Climbing Route Chart Generator__ is a Python application designed to generate pie chart graphics to visualize indoor
+climbing routes. These charts are produced from a CSV input, illustrating the distribution of the route grades and the
+associated setters. The tool is ideal for climbing gym managers to quickly and easily update the labels after a
+setting campaign.
 
 ![Sample chart](screenshot.png)
 
-## Installation
+
+## Online tool
+
+The simplest way to use this tool is to use the online version hosted by __Adrénaline Escalade__, a climbing club from Hauts de Seine (92) in France.
+
+[https://etiquettes.adrenaline-escalade.com/](https://etiquettes.adrenaline-escalade.com/)
+
+
+## Using locally with Docker
+
+This is the simplest option, assuming you already have Docker installed:
+
+      $ docker build -t climb-routes .
+      $ docker run -p 8080:8080 climb-routes
+
+Open your browser and navigate to localhost:8080
+
+
+## Using locally with CLI (command line interface)
+
+### Setup
 
 To set up Climbing Route Chart Generator, follow these steps:
 
-1. Create a virtual environment in a folder named "env":
+1. Create a virtual environment in a folder named "venv":
    ```bash
-   python -m venv env
+   python -m venv venv
    ```
 2. Activate the virtual environment:
    - On Windows:
      ```bash
-     .\env\Scripts\activate
+     .\venv\Scripts\activate
      ```
-   - On Unix or MacOS:
+   - On Linux or MacOS:
      ```bash
-     source env/bin/activate
+     source venv/bin/activate
      ```
 3. Install the required dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-## Usage
+### Usage
 
 Run the script with the following command:
 
 ```bash
+cd src
 ./route-charts.py -i <input_file.csv> [-o <output_file.pdf>]
 ```
 
@@ -43,7 +67,7 @@ Run the script with the following command:
 
 Refer to the output of `./route-charts.py --help` for a list of all optional arguments.
 
-## Input Format
+### Input Format
 
 The input should be a CSV file with the following columns:
 

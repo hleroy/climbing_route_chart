@@ -1,4 +1,4 @@
-import pandas as pd
+import csv
 
 from .utils import process_color
 
@@ -18,22 +18,24 @@ def process_csv(csv_string_io):
         ValueError: If the CSV data is missing one or more required columns or if the CSV is malformed.
 
     Returns:
-        pd.DataFrame: A pandas DataFrame containing processed data, specifically the columns 'Relais', 'Cotation',
+        List of Dicts: Each dict contains processed data for a row, specifically the columns 'Relais', 'Cotation',
         'Ouvreur', and 'Couleur'.
     """
-    # Read CSV file from StringIO object
-    data = pd.read_csv(csv_string_io)
+    reader = csv.DictReader(csv_string_io)
 
     # Validate required columns
     required_columns = {"Relais", "Couleur", "Cotation", "Ouvreur"}
-    if not required_columns.issubset(data.columns):
-        missing_columns = required_columns - set(data.columns)
+    if not required_columns.issubset(reader.fieldnames):
+        missing_columns = required_columns - set(reader.fieldnames)
         raise ValueError(f"CSV data is missing the following required columns: {missing_columns}")
 
-    # Process 'Couleur' column using the process_color function from utils
-    data["Couleur"] = data["Couleur"].apply(process_color)
+    # Process data
+    processed_data = []
+    for row in reader:
+        # Convert color names to hex codes
+        row["Couleur"] = process_color(row["Couleur"])
 
-    # Extract relevant columns
-    relevant_data = data[["Relais", "Cotation", "Ouvreur", "Couleur"]]
+        # Extract relevant columns and add to processed data
+        processed_data.append({col: row[col] for col in required_columns})
 
-    return relevant_data
+    return processed_data

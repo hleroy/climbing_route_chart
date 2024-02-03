@@ -1,4 +1,5 @@
-pandas
 drawSvg
 cairosvg
 PyPDF2
+Flask
+gunicorn

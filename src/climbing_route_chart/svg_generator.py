@@ -48,7 +48,7 @@ def determine_colors(route, x1, y1, x2, y2):
 
 
 def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, setter_fs):
-    """Adds a pie chart to an SVG drawing based on the climbing route data.
+    """Adds a pie chart to an SVG drawing based on climbing route data.
 
     This function creates a pie chart for a given group of climbing routes, adding it to an existing SVG drawing.
     It handles both single-color and gradient fills for the pie slices and adjusts the text color for readability
@@ -56,24 +56,25 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
 
     Args:
         drawing (draw.Drawing): The SVG drawing object to which the pie chart will be added.
-        group (pd.DataFrameGroupBy): The group of climbing routes data.
+        group (list of dict): The group of climbing routes data, where each route is represented as a dictionary.
         center_x (float): The x-coordinate of the center of the pie chart.
         center_y (float): The y-coordinate of the center of the pie chart.
         radius (float): The radius of the pie chart.
         grade_fs (int): Font size for the grade labels in the pie chart.
         setter_fs (int): Font size for the route setter names in the pie chart.
+
+    Raises:
+        Exception: If an error occurs in drawing the pie chart components.
+
+    Returns:
+        None: The function adds components to the SVG drawing but does not return anything.
     """
     num_routes = len(group)
     if num_routes == 0:
         return  # No routes to display
 
     if num_routes == 1:
-        # Handle single route as a full disc
-        route = group.iloc[0]
-        # For a vertical gradient, set x1 and x2 to the horizontal center, and y1, y2 to top and bottom
-        # x1, y1 = center_x, center_y - radius
-        # x2, y2 = center_x, center_y + radius
-        # For a horizontal gradient, set y1 and y2 to the vertical center, and x1, x2 to left and right
+        route = group[0]
         x1, y1 = center_x - radius, center_y
         x2, y2 = center_x + radius, center_y
         text_color, path_fill = determine_colors(route, x1, y1, x2, y2)
@@ -90,11 +91,8 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
         return
 
     start_angle = 0
-    for _, route in group.iterrows():
-        # Calculate sweep angle
+    for route in group:
         sweep_angle = 360 / num_routes
-
-        # Draw pie slice
         end_angle = start_angle + sweep_angle
         x1, y1 = center_x + radius * math.cos(math.radians(start_angle)), center_y + radius * math.sin(
             math.radians(start_angle)
@@ -105,7 +103,6 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
 
         text_color, path_fill = determine_colors(route, x1, y1, x2, y2)
 
-        # Create path for the pie slice with the appropriate fill color and stroke
         path = draw.Path(stroke_width=1, stroke="black", fill=path_fill)
         path.M(center_x, center_y)  # Move to center
         path.l(x1 - center_x, y1 - center_y)  # Line to first point on circumference
@@ -113,16 +110,13 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
         path.Z()  # Close path
         drawing.append(path)
 
-        # Add grade and route setter text
         mid_angle = (start_angle + end_angle) / 2
-        # Increase the multiplier to move text towards the outside of the pie
         text_radius_multiplier = 0.6
         text_x = center_x + radius * text_radius_multiplier * math.cos(math.radians(mid_angle))
         text_y = center_y + radius * text_radius_multiplier * math.sin(math.radians(mid_angle))
         drawing.append(
             draw.Text(text=route["Cotation"], font_size=grade_fs, x=text_x, y=text_y, center=0.5, fill=text_color)
         )
-        # Adjust the y position for the route setter text to avoid overlap
         drawing.append(
             draw.Text(text=route["Ouvreur"], font_size=setter_fs, x=text_x, y=text_y + 12, center=0.5, fill=text_color)
         )
@@ -131,15 +125,12 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
 
 
 def generate_svg_for_relay(relay, group, **kwargs):
-    """Generates an SVG drawing for a specific relay group.
-
-    Creates an SVG drawing representing a pie chart for the specified relay group. The function
-    allows customization of various aspects of the chart such as radius, font sizes, through
-    keyword arguments.
+    """
+    Generates an SVG drawing for a specific relay group.
 
     Args:
         relay (str): Identifier for the relay group.
-        group (DataFrame): Data for the specific relay group.
+        group (list of dicts): Data for the specific relay group.
         **kwargs: Keyword arguments for customizing the chart. Acceptable keys are 'radius',
                   'title_fs', 'grade_fs', 'setter_fs'.
 
