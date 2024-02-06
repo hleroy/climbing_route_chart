@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p>BLAH</p>
+<p>Copier-coller les infos depuis un tableur ou depuis un fichier CSV (comme dans l'exemple ci-dessous). Le seul pré-requis est que votre tableau comporte 4 colonnes intitulées précisément : <strong>Relais Couleur Cotation Ouvreur</strong></p>
+<p>Le fichier PDF généré comporte une page par relais. Pour les voies marbrées, suivez-bien la nomenclature dans mon exemple (cela génère un dégradé de couleur 🤩) :</p>
+<pre>MARBREE ( COULEUR1 / COULEUR2 / ... )</pre>
+<p><a href="colors">Liste des couleurs reconnues</a></p>
+<p>Les disques sont compatibles avec les <a href="https://www.9cplus.com/accessoires/338-plaque-de-protection-plexiglas.html">plaques de protection plexiglas que vous pouvez trouver chez 9c+</a> ou d'autres revendeurs.</p>
+
+<form action="." method="post">
+    <div>
+        <textarea id="textarea" name="message" rows="20" required>
+Relais,Couleur,Cotation,Ouvreur
+1,BLEUE,4b,MAT
+1,VIOLETTE,6b,SOLVEIG
+1,MARBREE (JAUNE / NOIRE),5a+,MAT
+1,MARBREE (VERTE/ BLANCHE),6b+,MAT
+2,ROUGE,6a+,MAT
+2,ORANGE,4c,MAT
+2,VERTE,5b,SOLVEIG
+2,JAUNE,5c,MANU
+3,BLANCHE,6a,TANGUY
+3,MAUVE,6b,MAT
+3,JAUNE FLUO,4c,?
+3,MARBREE (BLANCHE / BLEUE),5a+,SOREN</textarea>
+    </div>
+    <div>
+        <button type="submit">Génère le fichier PDF avec les étiquettes</button>
+    </div>
+</form>
+{% endblock %}

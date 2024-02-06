@@ -30,12 +30,21 @@
             padding: 1rem 0;
             margin-top: 1rem;
         }
+
+        .color-disk {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
     </style>
 </head>
 
 <body>
     <header class="container">
-        <h1>Générateur d'étiquettes de voies pour SAE</h1>
+        <h1>{% block title %}Générateur d'étiquettes de voies pour SAE{% endblock %}</h1>
         <div class="header-svg">
             <!-- SVG logo -->
             <svg width="140" height="140" viewBox="0 0 140 140" displayInline="False" version="1.1" id="svg12" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
@@ -64,34 +73,11 @@
             </svg>
         </div>
     </header>
-    <main class="container">
-        <p>Copier-coller les infos depuis un tableur ou depuis un fichier CSV (comme dans l'exemple ci-dessous). Le seul pré-requis est que votre tableau comporte 4 colonnes intitulées précisément : <strong>Relais Couleur Cotation Ouvreur</strong></p>
-        <p>Le fichier PDF généré comporte une page par relais. Pour les voies marbrées, suivez-bien la nomenclature dans mon exemple (cela génère un dégradé de couleur 🤩) :</p>
-        <pre>MARBREE ( COULEUR1 / COULEUR2 / ... )</pre>
-        <p>Les disques sont compatibles avec les <a href="https://www.9cplus.com/accessoires/338-plaque-de-protection-plexiglas.html">plaques de protection plexiglas que vous pouvez trouver chez 9c+</a> ou d'autres revendeurs.</p>
 
-        <form action="." method="post">
-            <div>
-                <textarea id="textarea" name="message" rows="20" required>
-Relais,Couleur,Cotation,Ouvreur
-1,BLEUE,4b,MAT
-1,VIOLETTE,6b,SOLVEIG
-1,MARBREE (JAUNE / NOIRE),5a+,MAT
-1,MARBREE (VERTE/ BLANCHE),6b+,MAT
-2,ROUGE,6a+,MAT
-2,ORANGE,4c,MAT
-2,VERTE,5b,SOLVEIG
-2,JAUNE,5c,MANU
-3,BLANCHE,6a,TANGUY
-3,MAUVE,6b,MAT
-3,JAUNE FLUO,4c,?
-3,MARBREE (BLANCHE / BLEUE),5a+,SOREN</textarea>
-            </div>
-            <div>
-                <button type="submit">Génère le fichier PDF avec les étiquettes</button>
-            </div>
-        </form>
+    <main class="container">
+        {% block content %}{% endblock %}
     </main>
+
     <footer class="container">
         <span>(c) 2024 Hervé Le Roy</span>
         <!-- GitHub Link -->
@@ -103,6 +89,6 @@ Relais,Couleur,Cotation,Ouvreur
             </a>
         </div>
     </footer>
-</body>
 
+</body>
 </html>

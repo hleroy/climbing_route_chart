@@ -4,7 +4,7 @@ import io
 import logging
 import os
 
-from flask import Flask, make_response, request
+from flask import Flask, make_response, render_template, request
 
 import climbing_route_chart as crc
 
@@ -13,26 +13,7 @@ logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 
 DEBUG = True
-BASE_DIRECTORY = "/app"
 DEFAULT_PORT = "8080"
-
-
-def load_html(filename):
-    """
-    Loads and returns the content of an HTML file from the base directory.
-
-    Args:
-        filename (str): The name of the HTML file to load.
-
-    Returns:
-        str: The content of the HTML file.
-
-    Raises:
-        FileNotFoundError: If the specified file does not exist.
-    """
-    file_path = f"{BASE_DIRECTORY}/{filename}"
-    with open(file_path, "r") as file:
-        return file.read()
 
 
 def parse_and_validate_csv(text):
@@ -103,9 +84,7 @@ def climb_routes():
     """
     if request.method == "GET":
         logging.info("Rendering form")
-        # Load and return the HTML form
-        html_content = load_html("form.html")
-        return html_content
+        return render_template("form.html")
 
     elif request.method == "POST":
         logging.info("Processing form")
@@ -133,6 +112,17 @@ def climb_routes():
                 raise Exception("Failed to generate the chart.")
         except Exception as e:
             return "Internal Server Error: " + str(e), 500
+
+
+@app.route("/colors", methods=["GET"])
+def list_colors():
+    """
+    Flask route to display a list of available colors along with their HEX codes.
+    """
+    # Directly use HEX_TO_COLOR_MAPPING to pass hex codes and names
+    color_mappings = crc.constants.HEX_TO_COLOR_MAPPING.items()
+
+    return render_template("colors.html", color_mappings=color_mappings)
 
 
 if __name__ == "__main__":

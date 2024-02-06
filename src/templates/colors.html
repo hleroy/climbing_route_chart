@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Liste des couleurs disponibles{% endblock %}
+
+{% block content %}
+<p>S'il vous manque une couleur, vous pouvez utiliser directement le code hexa de la couleur
+    (ex: <code>#ffeeaade</code>). Il existe de nombreux <a href="https://gradients.app/fr/converter">convertisseur
+        de code couleur</a> sur internet.</p>
+<table>
+    {% for hex_code, names in color_mappings %}
+    <tr>
+        <td><span class="color-disk" style="background-color: {{ hex_code }};"></span></td>
+        <td>{{ names | join(", ") }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
