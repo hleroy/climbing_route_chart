@@ -36,7 +36,7 @@ def process_color(color):
 
     This function handles the conversion of color names or hex codes to their respective hex codes,
     regardless of the case of the input. It also handles 'MARBREE' (or 'MARBLES') colors by parsing and
-    returning a list of individual colors. If a color is not found in the mapping, a default gray color
+    returning a list of individual colors or hex codes. If a color is not found in the mapping, a default gray color
     is used and a warning is printed.
 
     Args:
@@ -47,8 +47,18 @@ def process_color(color):
         list: A list of hex codes corresponding to the processed color(s).
     """
 
+    def is_hex_code(s):
+        """Check if a string is a valid hex code."""
+        if len(s) == 7 and s.startswith("#"):
+            try:
+                int(s[1:], 16)
+                return True
+            except ValueError:
+                return False
+        return False
+
     # Check if the input is already a hex code
-    if color.startswith("#") and len(color) == 7:
+    if is_hex_code(color):
         return [color]
 
     # Convert color name to upper case for case-insensitive comparison
@@ -58,12 +68,14 @@ def process_color(color):
     if "MARBREE" in color or "MARBLES" in color:
         # Extract the colors in the brackets
         colors_in_brackets = color.split("(")[-1].split(")")[0]
-        # Split the colors and map them to hex codes
+        # Split the colors and map them to hex codes or validate if already hex
         hex_codes = []
         for c in colors_in_brackets.split("/"):
-            c = c.strip().upper()
-            if c in COLOR_MAPPING:
-                hex_codes.append(COLOR_MAPPING[c])
+            c = c.strip()
+            if is_hex_code(c):
+                hex_codes.append(c)
+            elif c.upper() in COLOR_MAPPING:
+                hex_codes.append(COLOR_MAPPING[c.upper()])
             else:
                 print(f"Warning: Color '{c}' not found, defaulting to gray.")
                 hex_codes.append("#808080")
