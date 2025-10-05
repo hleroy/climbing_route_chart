@@ -47,7 +47,7 @@ def determine_colors(route, x1, y1, x2, y2):
     return text_color, path_fill
 
 
-def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, setter_fs):
+def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, setter_fs, relay):
     """Adds a pie chart to an SVG drawing based on climbing route data.
 
     This function creates a pie chart for a given group of climbing routes, adding it to an existing SVG drawing.
@@ -62,6 +62,7 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
         radius (float): The radius of the pie chart.
         grade_fs (int): Font size for the grade labels in the pie chart.
         setter_fs (int): Font size for the route setter names in the pie chart.
+        relay (str): The relay number to display on the chart.
 
     Raises:
         Exception: If an error occurs in drawing the pie chart components.
@@ -87,6 +88,19 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
             draw.Text(
                 text=route["Ouvreur"], font_size=setter_fs, x=center_x, y=text_y + 12, center=0.5, fill=text_color
             )
+        )
+
+        # Add relay number in a rectangle at the top of the disk
+        relay_text = str(relay)
+        relay_fs = 17
+        rect_width = 14
+        rect_height = 15
+        rect_x = center_x - rect_width / 2
+        rect_y = center_y - radius + 5
+
+        drawing.append(draw.Rectangle(rect_x, rect_y, rect_width, rect_height, fill="white", stroke_width=1, stroke="black"))
+        drawing.append(
+            draw.Text(text=relay_text, font_size=relay_fs, x=center_x, y=rect_y + rect_height / 2 + 1, center=0.5, fill="black")
         )
         return
 
@@ -122,6 +136,19 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
         )
 
         start_angle = end_angle
+
+    # Add relay number in a rectangle at the top of the disk (for multi-route case)
+    relay_text = str(relay)
+    relay_fs = 17
+    rect_width = 14
+    rect_height = 15
+    rect_x = center_x - rect_width / 2
+    rect_y = center_y - radius + 5
+
+    drawing.append(draw.Rectangle(rect_x, rect_y, rect_width, rect_height, fill="white", stroke_width=1, stroke="black"))
+    drawing.append(
+        draw.Text(text=relay_text, font_size=relay_fs, x=center_x, y=rect_y + rect_height / 2 + 1, center=0.5, fill="black")
+    )
 
 
 def generate_svg_for_relay(relay, group, **kwargs):
@@ -159,6 +186,7 @@ def generate_svg_for_relay(relay, group, **kwargs):
         radius=radius,
         grade_fs=grade_fs,
         setter_fs=setter_fs,
+        relay=relay,
     )
 
     # Return SVG as a string
