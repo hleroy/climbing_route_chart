@@ -1,8 +1,8 @@
 # Base stage with Python Alpine image
-FROM python:3.10-alpine as base
+FROM python:3.10-alpine AS base
 
 # Builder stage for installing dependencies
-FROM base as builder
+FROM base AS builder
 COPY requirements.txt /requirements.txt
 RUN pip install --user -r /requirements.txt
 
@@ -17,7 +17,7 @@ COPY src /app
 WORKDIR /app
 
 # Expose port
-ENV PORT 8080
+ENV PORT=8080
 EXPOSE 8080
 
 # Correct PATH environment variable
