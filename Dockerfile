@@ -9,8 +9,8 @@ RUN pip install --user -r /requirements.txt
 # Final stage for running the application
 FROM base
 
-# Install Cairo and dependencies
-RUN apk add --no-cache cairo cairo-dev
+# Install Cairo and dependencies with DejaVu fonts for proper Unicode and italic support
+RUN apk add --no-cache cairo cairo-dev ttf-dejavu fontconfig
 
 COPY --from=builder /root/.local /root/.local
 COPY src /app

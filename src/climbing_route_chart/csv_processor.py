@@ -25,6 +25,7 @@ def process_csv(csv_string_io):
 
     # Validate required columns
     required_columns = {"Relais", "Couleur", "Cotation", "Ouvreur"}
+    optional_columns = {"Commentaire"}
     if not required_columns.issubset(reader.fieldnames):
         missing_columns = required_columns - set(reader.fieldnames)
         raise ValueError(f"CSV data is missing the following required columns: {missing_columns}")
@@ -35,7 +36,12 @@ def process_csv(csv_string_io):
         # Convert color names to hex codes
         row["Couleur"] = process_color(row["Couleur"])
 
-        # Extract relevant columns and add to processed data
-        processed_data.append({col: row[col] for col in required_columns})
+        # Extract relevant columns (required + optional if present)
+        columns_to_extract = required_columns.copy()
+        for optional_col in optional_columns:
+            if optional_col in reader.fieldnames and row.get(optional_col):
+                columns_to_extract.add(optional_col)
+
+        processed_data.append({col: row[col] for col in columns_to_extract if col in row})
 
     return processed_data

@@ -82,13 +82,28 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
         text_y = center_y - radius / 2
         drawing.append(draw.Circle(center_x, center_y, radius, fill=path_fill, stroke_width=1, stroke="black"))
         drawing.append(
-            draw.Text(text=route["Cotation"], font_size=grade_fs, x=center_x, y=text_y, center=0.5, fill=text_color)
+            draw.Text(text=route["Cotation"], font_size=grade_fs, x=center_x, y=text_y, center=0.5, fill=text_color, font_family="DejaVu Sans")
         )
         drawing.append(
             draw.Text(
-                text=route["Ouvreur"], font_size=setter_fs, x=center_x, y=text_y + 12, center=0.5, fill=text_color
+                text=route["Ouvreur"], font_size=setter_fs, x=center_x, y=text_y + 12, center=0.5, fill=text_color, font_family="DejaVu Sans"
             )
         )
+        # Add Commentaire if present
+        if "Commentaire" in route and route["Commentaire"]:
+            comment_fs = min(setter_fs, 8)  # Max font size is setter_fs
+            drawing.append(
+                draw.Text(
+                    text=route["Commentaire"],
+                    font_size=comment_fs,
+                    x=center_x,
+                    y=text_y + 12 + setter_fs,
+                    center=0.5,
+                    fill=text_color,
+                    font_family="DejaVu Sans",
+                    font_style="italic",
+                )
+            )
 
         # Add relay number in a rectangle at the top of the disk
         relay_text = str(relay)
@@ -100,7 +115,7 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
 
         drawing.append(draw.Rectangle(rect_x, rect_y, rect_width, rect_height, fill="white", stroke_width=1, stroke="black"))
         drawing.append(
-            draw.Text(text=relay_text, font_size=relay_fs, x=center_x, y=rect_y + rect_height / 2 + 1, center=0.5, fill="black")
+            draw.Text(text=relay_text, font_size=relay_fs, x=center_x, y=rect_y + rect_height / 2 + 1, center=0.5, fill="black", font_family="DejaVu Sans")
         )
         return
 
@@ -127,13 +142,30 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
         mid_angle = (start_angle + end_angle) / 2
         text_radius_multiplier = 0.6
         text_x = center_x + radius * text_radius_multiplier * math.cos(math.radians(mid_angle))
-        text_y = center_y + radius * text_radius_multiplier * math.sin(math.radians(mid_angle))
+        text_y = center_y + radius * text_radius_multiplier * math.sin(math.radians(mid_angle)) - 5
         drawing.append(
-            draw.Text(text=route["Cotation"], font_size=grade_fs, x=text_x, y=text_y, center=0.5, fill=text_color)
+            draw.Text(text=route["Cotation"], font_size=grade_fs, x=text_x, y=text_y, center=0.5, fill=text_color, font_family="DejaVu Sans")
         )
         drawing.append(
-            draw.Text(text=route["Ouvreur"], font_size=setter_fs, x=text_x, y=text_y + 12, center=0.5, fill=text_color)
+            draw.Text(text=route["Ouvreur"], font_size=setter_fs, x=text_x, y=text_y + 12, center=0.5, fill=text_color, font_family="DejaVu Sans")
         )
+        # Add Commentaire if present
+        if "Commentaire" in route and route["Commentaire"]:
+            # Calculate font size based on slice angle to fit text
+            slice_arc_length = (sweep_angle / 360) * 2 * math.pi * radius * text_radius_multiplier
+            comment_fs = min(setter_fs, int(slice_arc_length / len(route["Commentaire"]) *1.5))
+            drawing.append(
+                draw.Text(
+                    text=route["Commentaire"],
+                    font_size=comment_fs,
+                    x=text_x,
+                    y=text_y + 12 + setter_fs,
+                    center=0.5,
+                    fill=text_color,
+                    font_family="DejaVu Sans",
+                    font_style="italic",
+                )
+            )
 
         start_angle = end_angle
 
@@ -147,7 +179,7 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
 
     drawing.append(draw.Rectangle(rect_x, rect_y, rect_width, rect_height, fill="white", stroke_width=1, stroke="black"))
     drawing.append(
-        draw.Text(text=relay_text, font_size=relay_fs, x=center_x, y=rect_y + rect_height / 2 + 1, center=0.5, fill="black")
+        draw.Text(text=relay_text, font_size=relay_fs, x=center_x, y=rect_y + rect_height / 2 + 1, center=0.5, fill="black", font_family="DejaVu Sans")
     )
 
 
@@ -175,7 +207,7 @@ def generate_svg_for_relay(relay, group, **kwargs):
 
     # Add a title to the SVG
     relay_name = f"Relais {relay}"
-    d.append(draw.Text(text=relay_name, font_size=title_fs, x=105, y=30, center=0.5, valign="top"))
+    d.append(draw.Text(text=relay_name, font_size=title_fs, x=105, y=30, center=0.5, valign="top", font_family="DejaVu Sans"))
 
     # Draw the pie chart
     add_pie_chart_to_svg(

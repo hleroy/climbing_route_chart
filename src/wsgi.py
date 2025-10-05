@@ -45,13 +45,25 @@ def parse_and_validate_csv(text):
 
     # Check for required headers
     required_headers = ["Relais", "Couleur", "Cotation", "Ouvreur"]
-    if rows[0] != required_headers:
+    optional_headers = ["Commentaire"]
+
+    # Check if all required headers are present
+    if not all(header in rows[0] for header in required_headers):
         raise ValueError("CSV header missing or incorrect on line 1")
 
-    # Validate each row
+    # Determine expected column count (required + optional if present)
+    has_commentaire = "Commentaire" in rows[0]
+    min_columns = len(required_headers)
+    max_columns = min_columns + (1 if has_commentaire else 0)
+
+    # Validate each row - must have at least required columns, at most required + optional
     for index, row in enumerate(rows, start=1):  # Start counting from 1
-        if len(row) != len(required_headers) and index > 0:  # Skip the header row for this check
-            raise ValueError(f"CSV row on line {index} does not contain the correct number of values")
+        if index > 0:  # Skip the header row for this check
+            if len(row) < min_columns or len(row) > max_columns:
+                raise ValueError(f"CSV row on line {index} does not contain the correct number of values")
+            # Pad row with empty string if Commentaire column exists but value is missing
+            if has_commentaire and len(row) < max_columns:
+                row.append("")
 
     # If tab-delimited, convert to CSV
     if delimiter == "\t":

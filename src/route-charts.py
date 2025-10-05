@@ -27,12 +27,12 @@ import os
 
 import climbing_route_chart as crc
 
-sample_csv_data = """Relais,Couleur,Cotation,Ouvreur
+sample_csv_data = """Relais,Couleur,Cotation,Ouvreur,Commentaire
 1,BLEUE,4b,MAT
 1,VIOLETTE,6b,SOLVEIG
 1,MARBREE (JAUNE / NOIRE),5a+,MAT
 1,MARBREE (VERTE/ BLANCHE),6b+,MAT
-2,ROUGE,6a+,MAT
+2,ROUGE,6a+,MAT,Sans arrête
 2,ORANGE,4c,MAT
 2,VERTE,5b,SOLVEIG
 2,JAUNE,5c,MANU
