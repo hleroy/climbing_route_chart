@@ -70,12 +70,16 @@ Reportez-vous à la sortie de `./route-charts.py --help` pour une liste de tous 
 
 ### Format d'Entrée
 
-L'entrée doit être un fichier CSV avec les colonnes suivantes :
+L'entrée doit être un fichier CSV avec les colonnes obligatoires suivantes :
 
 - Relais
 - Couleur
 - Cotation
 - Ouvreur
+
+Et la colonne optionnelle suivante :
+
+- Commentaire (affiche un texte supplémentaire sous le nom de l'ouvreur, par exemple "Sans arrête", le nom de la voie ou la date d'ouverture)
 
 ## Licence
 

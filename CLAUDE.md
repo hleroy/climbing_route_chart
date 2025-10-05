@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Climbing Route Chart Generator is a Python application that generates pie chart graphics to visualize indoor climbing routes. It accepts CSV input with route data (relay, color, grade, setter) and produces PDF charts suitable for printing climbing gym labels in A4 format.
+Climbing Route Chart Generator is a Python application that generates pie chart graphics to visualize indoor climbing routes. It accepts CSV input with route data (relay, color, grade, setter, and optional comment) and produces PDF charts suitable for printing climbing gym labels in A4 format.
 
 The tool can be used in three ways:
 1. CLI (command line)
@@ -41,11 +41,13 @@ The `utils.py` module handles color conversion:
 
 Required columns: `Relais`, `Couleur`, `Cotation`, `Ouvreur`
 
+Optional columns: `Commentaire` (displays additional text below setter name in italics, e.g., "Sans arrête", route name, or opening date)
+
 Example:
 ```
-Relais,Couleur,Cotation,Ouvreur
+Relais,Couleur,Cotation,Ouvreur,Commentaire
 1,BLEUE,4b,MAT
-1,MARBREE (JAUNE / NOIRE),5a+,MAT
+1,MARBREE (JAUNE / NOIRE),5a+,MAT,Sans arrête
 ```
 
 ## Development Commands

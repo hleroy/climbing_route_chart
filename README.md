@@ -69,12 +69,16 @@ Refer to the output of `./route-charts.py --help` for a list of all optional arg
 
 ### Input Format
 
-The input should be a CSV file with the following columns:
+The input should be a CSV file with the following required columns:
 
 - Relais
 - Couleur
 - Cotation
 - Ouvreur
+
+And the following optional column:
+
+- Commentaire (displays additional text below the setter name, e.g., "Sans arrête", route name, or opening date)
 
 ## License
 

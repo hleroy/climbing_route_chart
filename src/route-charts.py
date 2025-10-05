@@ -57,7 +57,8 @@ def parse_arguments():
     parser = argparse.ArgumentParser(
         description="Generate a multi-page PDF document of color pie charts for climbing routes grades. "
         "The input CSV file should have columns for 'Relais' (relay), 'Couleur' (color), "
-        "'Cotation' (grade), and 'Ouvreur' (route setter)."
+        "'Cotation' (grade), and 'Ouvreur' (route setter). "
+        "An optional 'Commentaire' (comment) column can be added to display additional text below the setter name."
     )
     # Mandatory input file argument
     parser.add_argument(
