@@ -6,11 +6,10 @@
 <p>Le fichier PDF généré comporte une page par relais. Pour les voies marbrées, suivez-bien la nomenclature dans mon exemple (cela génère un dégradé de couleur 🤩) :</p>
 <pre>MARBREE ( COULEUR1 / COULEUR2 / ... )</pre>
 <p><a href="colors">Liste des couleurs reconnues</a></p>
-<p>Les disques sont compatibles avec les <a href="https://www.9cplus.com/accessoires/338-plaque-de-protection-plexiglas.html">plaques de protection plexiglas que vous pouvez trouver chez 9c+</a> ou d'autres revendeurs.</p>
 
 <form action="." method="post">
     <div>
-        <textarea id="textarea" name="message" rows="20" required>
+        <textarea id="textarea" name="message" rows="14" required>
 Relais,Couleur,Cotation,Ouvreur,Commentaire
 1,BLEUE,4b,MAT
 1,VIOLETTE,6b,SOLVEIG
@@ -28,5 +27,6 @@ Relais,Couleur,Cotation,Ouvreur,Commentaire
     <div>
         <button type="submit">Génère le fichier PDF avec les étiquettes</button>
     </div>
+    <p>Pour plus de personnalisation, je vous recommander d'éditer le fichier PDF avec le <a href="https://inkscape.org/">logiciel de dessin vectoriel Inkscape</a>. Les disques sont compatibles avec les plaques de protection plexiglas de la boutique 9c+ (désormais fermée). Il doit être possible d'en commander sur mesure sur un site comme <a href="https://www.plaque-plexiglass.fr">https://www.plaque-plexiglass.fr</a></p>
 </form>
 {% endblock %}

@@ -108,7 +108,7 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
         # Add relay number in a rectangle at the top of the disk
         relay_text = str(relay)
         relay_fs = 17
-        rect_width = 14
+        rect_width = 14 + (len(relay_text) - 1) * 10  # Dynamic width based on text length
         rect_height = 15
         rect_x = center_x - rect_width / 2
         rect_y = center_y - radius + 5
@@ -143,6 +143,12 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
         text_radius_multiplier = 0.6
         text_x = center_x + radius * text_radius_multiplier * math.cos(math.radians(mid_angle))
         text_y = center_y + radius * text_radius_multiplier * math.sin(math.radians(mid_angle)) - 5
+
+        # Adjust text position if it would overlap with relay box at the top (around 270°)
+        # The relay box is positioned at the top of the circle, so slices with mid_angle
+        # between 240° and 300° need their text moved downward to avoid overlap
+        if 240 <= mid_angle <= 300:
+            text_y += 15  # Move text downward to clear the relay box
         drawing.append(
             draw.Text(text=route["Cotation"], font_size=grade_fs, x=text_x, y=text_y, center=0.5, fill=text_color, font_family="DejaVu Sans")
         )
@@ -172,7 +178,7 @@ def add_pie_chart_to_svg(drawing, group, center_x, center_y, radius, grade_fs, s
     # Add relay number in a rectangle at the top of the disk (for multi-route case)
     relay_text = str(relay)
     relay_fs = 17
-    rect_width = 14
+    rect_width = 14 + (len(relay_text) - 1) * 10  # Dynamic width based on text length
     rect_height = 15
     rect_x = center_x - rect_width / 2
     rect_y = center_y - radius + 5
