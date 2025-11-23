@@ -3,6 +3,51 @@ import re
 from .constants import COLOR_MAPPING
 
 
+def interpolate_gradient_middle_color(colors):
+    """Calculate the interpolated middle color of a gradient.
+
+    For gradients with multiple colors, this function calculates the RGB values
+    at the 50% point of the gradient by interpolating between color stops.
+
+    Args:
+        colors (list): List of hex color codes in the gradient.
+
+    Returns:
+        str: Hex color code representing the middle color of the gradient.
+    """
+    if len(colors) == 1:
+        return colors[0]
+
+    # Calculate which segment the 50% point falls in
+    num_segments = len(colors) - 1
+    segment_size = 1.0 / num_segments
+    middle_position = 0.5
+
+    segment_index = int(middle_position / segment_size)
+    # Ensure we don't go out of bounds
+    segment_index = min(segment_index, num_segments - 1)
+
+    # Calculate position within the segment (0.0 to 1.0)
+    segment_start = segment_index * segment_size
+    position_in_segment = (middle_position - segment_start) / segment_size
+
+    # Get the two colors to interpolate between
+    color1 = colors[segment_index]
+    color2 = colors[segment_index + 1]
+
+    # Convert hex to RGB
+    r1, g1, b1 = int(color1[1:3], 16), int(color1[3:5], 16), int(color1[5:7], 16)
+    r2, g2, b2 = int(color2[1:3], 16), int(color2[3:5], 16), int(color2[5:7], 16)
+
+    # Interpolate
+    r = int(r1 + (r2 - r1) * position_in_segment)
+    g = int(g1 + (g2 - g1) * position_in_segment)
+    b = int(b1 + (b2 - b1) * position_in_segment)
+
+    # Convert back to hex
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+
 def is_dark_color(hex_code):
     """Determines if a given color is dark based on its luminance.
 

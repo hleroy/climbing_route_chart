@@ -3,7 +3,7 @@ import math
 import drawsvg as draw
 
 from . import constants
-from .utils import is_dark_color
+from .utils import interpolate_gradient_middle_color, is_dark_color
 
 
 def determine_colors(route, x1, y1, x2, y2):
@@ -37,8 +37,9 @@ def determine_colors(route, x1, y1, x2, y2):
 
     # Determine text color
     if len(route["Couleur"]) > 1:
-        # Gradient case
-        text_color = "white"  # Default to white for gradients
+        # Gradient case - calculate interpolated middle color for luminance check
+        middle_color = interpolate_gradient_middle_color(route["Couleur"])
+        text_color = "white" if is_dark_color(middle_color) else "black"
     else:
         # Single color
         path_fill = route["Couleur"][0]
