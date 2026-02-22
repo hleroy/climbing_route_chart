@@ -1,4 +1,5 @@
 import re
+import unicodedata
 
 from .constants import COLOR_MAPPING
 
@@ -109,8 +110,12 @@ def process_color(color):
     # Convert color name to upper case for case-insensitive comparison
     color = color.upper()
 
+    # Normalize accented characters (e.g. "MARBRÉE" -> "MARBREE") for comparison
+    color_normalized = unicodedata.normalize("NFD", color)
+    color_normalized = "".join(c for c in color_normalized if unicodedata.category(c) != "Mn")
+
     # Check for 'MARBREE' or 'MARBLES' and handle accordingly
-    if "MARBREE" in color or "MARBLES" in color:
+    if "MARBREE" in color_normalized or "MARBLES" in color_normalized:
         # Extract the colors in the brackets
         colors_in_brackets = color.split("(")[-1].split(")")[0]
         # Split the colors and map them to hex codes or validate if already hex
